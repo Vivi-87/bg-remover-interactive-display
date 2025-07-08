@@ -1,0 +1,424 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canva Display Ads - All Sizes Preview</title>
+    <style>
+        /* Canva font definitions */
+        @font-face {
+            font-family: 'CanvaSansDisplay-Regular';
+            src: url('Font/CanvaSansDisplay-Regular.woff') format('woff');
+            font-weight: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'CanvaSans-Medium';
+            src: url('Font/CanvaSans-Medium.woff') format('woff');
+            font-weight: 500;
+            font-display: swap;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'CanvaSans-Medium', Arial, sans-serif;
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            min-height: 100vh;
+            padding: 40px 20px;
+        }
+        
+        .header {
+            text-align: center;
+            margin-bottom: 50px;
+        }
+        
+        .header h1 {
+            font-family: 'CanvaSansDisplay-Regular', Arial, sans-serif;
+            font-size: 48px;
+            font-weight: normal;
+            color: #333;
+            margin-bottom: 15px;
+            letter-spacing: -0.03em;
+        }
+        
+        .header p {
+            font-size: 18px;
+            color: #666;
+            max-width: 600px;
+            margin: 0 auto;
+            line-height: 1.5;
+        }
+        
+        .ads-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(400px, 1fr));
+            gap: 40px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        
+        .ad-showcase {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        
+        .ad-showcase:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .ad-info {
+            margin-bottom: 15px;
+            text-align: center;
+        }
+        
+        .ad-title {
+            font-size: 24px;
+            font-weight: 500;
+            color: #333;
+            margin-bottom: 8px;
+        }
+        
+        .ad-details {
+            font-size: 14px;
+            color: #666;
+            margin-bottom: 15px;
+        }
+        
+        .ad-container-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 200px;
+            margin-bottom: 20px;
+        }
+        
+        .ad-actions {
+            display: flex;
+            gap: 10px;
+            justify-content: center;
+        }
+        
+        .btn {
+            padding: 10px 20px;
+            border: none;
+            border-radius: 8px;
+            font-family: 'CanvaSans-Medium', Arial, sans-serif;
+            font-size: 14px;
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .btn-primary {
+            background: linear-gradient(135deg, #13A3B5 0%, #992BFF 100%);
+            color: white;
+        }
+        
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(153, 43, 255, 0.3);
+        }
+        
+        .btn-secondary {
+            background: #f8f9fa;
+            color: #333;
+            border: 1px solid #e9ecef;
+        }
+        
+        .btn-secondary:hover {
+            background: #e9ecef;
+        }
+        
+        /* Responsive iframe styling */
+        .ad-frame {
+            border: 1px solid #ddd;
+            border-radius: 8px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+        
+        /* Grid layout adjustments for different screen sizes */
+        @media (max-width: 768px) {
+            .ads-grid {
+                grid-template-columns: 1fr;
+                gap: 30px;
+            }
+            
+            .header h1 {
+                font-size: 36px;
+            }
+            
+            .header p {
+                font-size: 16px;
+            }
+            
+            .ad-showcase {
+                padding: 20px;
+            }
+        }
+        
+        /* Special layout for skyscraper ads */
+        .skyscraper-wrapper {
+            min-height: 300px;
+        }
+        
+        /* Stats section */
+        .stats {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            margin: 50px auto;
+            max-width: 800px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            text-align: center;
+        }
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+            gap: 30px;
+            margin-top: 30px;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-number {
+            font-family: 'CanvaSansDisplay-Regular', Arial, sans-serif;
+            font-size: 36px;
+            font-weight: normal;
+            color: #992BFF;
+            display: block;
+            margin-bottom: 5px;
+        }
+        
+        .stat-label {
+            font-size: 14px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <div class="header">
+        <h1>Canva Display Ads</h1>
+        <p>Complete set of responsive display advertisements featuring dynamic animations, interactive elements, and optimized layouts for every major ad format.</p>
+    </div>
+    
+    <!-- Stats Overview -->
+    <div class="stats">
+        <h2 style="font-family: 'CanvaSansDisplay-Regular', Arial, sans-serif; font-size: 28px; color: #333; margin-bottom: 10px;">Ad Portfolio Overview</h2>
+        <p style="color: #666; margin-bottom: 20px;">Professional display advertising suite with consistent branding and animations</p>
+        
+        <div class="stats-grid">
+            <div class="stat-item">
+                <span class="stat-number">6</span>
+                <span class="stat-label">Ad Formats</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">100%</span>
+                <span class="stat-label">Mobile Ready</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">All</span>
+                <span class="stat-label">Animations</span>
+            </div>
+            <div class="stat-item">
+                <span class="stat-number">IAB</span>
+                <span class="stat-label">Standard</span>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Ads Grid -->
+    <div class="ads-grid">
+        <!-- 970x250 Leaderboard -->
+        <div class="ad-showcase">
+            <div class="ad-info">
+                <div class="ad-title">970×250</div>
+            </div>
+            <div class="ad-container-wrapper">
+                <iframe src="ad-970x250/index.html" 
+                        width="970" height="250" 
+                        class="ad-frame"
+                        style="transform: scale(0.85); transform-origin: center;">
+                </iframe>
+            </div>
+            <div class="ad-actions">
+                <a href="ad-970x250/index.html" target="_blank" class="btn btn-primary">
+                    <span>View Full Size</span>
+                </a>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 728x90 Banner -->
+        <div class="ad-showcase">
+            <div class="ad-info">
+                <div class="ad-title">728×90</div>
+            </div>
+            <div class="ad-container-wrapper">
+                <iframe src="ad-728x90/index.html" 
+                        width="728" height="90" 
+                        class="ad-frame">
+                </iframe>
+            </div>
+            <div class="ad-actions">
+                <a href="ad-728x90/index.html" target="_blank" class="btn btn-primary">
+                    <span>View Full Size</span>
+                </a>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 300x600 Half Page -->
+        <div class="ad-showcase">
+            <div class="ad-info">
+                <div class="ad-title">300×600</div>
+            </div>
+            <div class="ad-container-wrapper skyscraper-wrapper">
+                <iframe src="ad-300x600/index.html" 
+                        width="300" height="600" 
+                        class="ad-frame"
+                        style="transform: scale(0.75); transform-origin: center;">
+                </iframe>
+            </div>
+            <div class="ad-actions">
+                <a href="ad-300x600/index.html" target="_blank" class="btn btn-primary">
+                    <span>View Full Size</span>
+                </a>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 300x250 Medium Rectangle -->
+        <div class="ad-showcase">
+            <div class="ad-info">
+                <div class="ad-title">300×250</div>
+            </div>
+            <div class="ad-container-wrapper">
+                <iframe src="index.html" 
+                        width="300" height="250" 
+                        class="ad-frame">
+                </iframe>
+            </div>
+            <div class="ad-actions">
+                <a href="index.html" target="_blank" class="btn btn-primary">
+                    <span>View Full Size</span>
+                </a>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 160x600 Skyscraper -->
+        <div class="ad-showcase">
+            <div class="ad-info">
+                <div class="ad-title">160×600</div>
+            </div>
+            <div class="ad-container-wrapper skyscraper-wrapper">
+                <iframe src="ad-160x600/index.html" 
+                        width="160" height="600" 
+                        class="ad-frame"
+                        style="transform: scale(0.75); transform-origin: center;">
+                </iframe>
+            </div>
+            <div class="ad-actions">
+                <a href="ad-160x600/index.html" target="_blank" class="btn btn-primary">
+                    <span>View Full Size</span>
+                </a>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- 320x50 Mobile Banner -->
+        <div class="ad-showcase">
+            <div class="ad-info">
+                <div class="ad-title">320×50</div>
+            </div>
+            <div class="ad-container-wrapper">
+                <iframe src="ad-320x50/index.html" 
+                        width="320" height="50" 
+                        class="ad-frame">
+                </iframe>
+            </div>
+            <div class="ad-actions">
+                <a href="ad-320x50/index.html" target="_blank" class="btn btn-primary">
+                    <span>View Full Size</span>
+                </a>
+                <button class="btn btn-secondary" onclick="location.reload()">
+                    <span>Refresh</span>
+                </button>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Footer -->
+    <div style="text-align: center; margin-top: 80px; padding: 40px; color: #666;">
+        <p style="font-size: 16px; margin-bottom: 10px;">🎨 Created with Canva's signature design elements</p>
+        <p style="font-size: 14px;">All ads feature interactive animations, responsive layouts, and optimized performance</p>
+    </div>
+    
+    <script>
+        // Add some interactive effects to the showcase
+        document.addEventListener('DOMContentLoaded', function() {
+            const showcases = document.querySelectorAll('.ad-showcase');
+            
+            showcases.forEach((showcase, index) => {
+                // Stagger the initial animation
+                showcase.style.opacity = '0';
+                showcase.style.transform = 'translateY(30px)';
+                
+                setTimeout(() => {
+                    showcase.style.transition = 'all 0.6s ease';
+                    showcase.style.opacity = '1';
+                    showcase.style.transform = 'translateY(0)';
+                }, index * 150);
+            });
+            
+            // Add click tracking for analytics
+            const viewButtons = document.querySelectorAll('.btn-primary');
+            viewButtons.forEach(button => {
+                button.addEventListener('click', function() {
+                    const adTitle = this.closest('.ad-showcase').querySelector('.ad-title').textContent;
+                    console.log(`Viewing ${adTitle} ad in full size`);
+                    // Here you could send analytics data
+                });
+            });
+        });
+        
+        // Optional: Auto-refresh iframes every 30 seconds to show animations
+        // setInterval(() => {
+        //     const iframes = document.querySelectorAll('iframe');
+        //     iframes.forEach(iframe => {
+        //         iframe.src = iframe.src;
+        //     });
+        // }, 30000);
+    </script>
+</body>
+</html> 

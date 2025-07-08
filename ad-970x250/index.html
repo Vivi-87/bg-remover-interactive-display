@@ -1,0 +1,598 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canva Display Ad - 970x250</title>
+    <style>
+        /* Canva font definitions */
+        @font-face {
+            font-family: 'CanvaSansDisplay-Regular';
+            src: url('../Font/CanvaSansDisplay-Regular.woff') format('woff');
+            font-weight: normal;
+            font-display: swap;
+        }
+
+        @font-face {
+            font-family: 'CanvaSans-Medium';
+            src: url('../Font/CanvaSans-Medium.woff') format('woff');
+            font-weight: 500;
+            font-display: swap;
+        }
+        
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f5f5f5;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* Animation keyframes */
+        @keyframes svgSwipeAcross {
+            0% {
+                transform: translateX(-100%);
+                opacity: 1;
+            }
+            100% {
+                transform: translateX(100%);
+                opacity: 1;
+            }
+        }
+        
+        @keyframes imageSwap {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+        
+        /* 4-pointed star shape - completely invisible by default */
+        .sparkle {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            opacity: 0;
+            visibility: hidden;
+            transform: translate(-50%, -50%) scale(0);
+            pointer-events: none;
+        }
+        
+        @keyframes scaleTransition {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.2); }
+            100% { transform: scale(1); }
+        }
+        
+        /* Headline styles - adjusted for leaderboard */
+        .ad-headline {
+            font-family: 'CanvaSansDisplay-Regular', Arial, sans-serif;
+            font-size: 42px;
+            font-weight: normal;
+            margin: 0 20px;
+            line-height: 1.1;
+            letter-spacing: -0.03em;
+            position: absolute;
+            left: 185px;
+            right: 0;
+            text-align: left;
+            color: white;
+            z-index: 2;
+            white-space: normal;
+            max-width: 445px;
+            transform: translateY(-50%);
+        }
+        
+        @keyframes headlineExitUp {
+            0% {
+                transform: translateY(-50%) translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(-50%) translateY(-10px);
+                opacity: 0;
+            }
+        }
+        
+        @keyframes headlineEnterUp {
+            0% {
+                transform: translateY(-50%) translateY(10px);
+                opacity: 0;
+            }
+            100% {
+                transform: translateY(-50%) translateY(0);
+                opacity: 1;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Main Ad Container -->
+    <div class="ad-container" id="ad-container" style="
+        width: 970px;
+        height: 250px;
+        position: relative;
+        overflow: hidden;
+        cursor: pointer;
+        border: 1px solid #ddd;
+        background: linear-gradient(135deg, #13A3B5 0%, #992BFF 100%);
+        transition: transform 0.3s ease;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    ">
+        <!-- Logo - Vertically centered as unit -->
+        <div style="
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(calc(-50% - 17.5px));
+            z-index: 3;
+            width: 130px;
+            height: auto;
+        ">
+            <svg style="
+                width: 100%;
+                height: auto;
+            " viewBox="0 0 238 77" fill="none" xmlns="http://www.w3.org/2000/svg">
+               <path d="M235.966 52.0858C235.562 52.0858 235.194 52.3472 235.004 52.8937C232.568 59.844 229.277 63.9786 226.569 63.9786C225.012 63.9786 224.382 62.244 224.382 59.5233C224.382 52.7155 228.458 38.2802 230.513 31.6982C230.751 30.9022 230.905 30.1893 230.905 29.5834C230.905 27.6706 229.86 26.732 227.27 26.732C224.478 26.732 221.472 27.825 218.549 32.9457C217.539 28.431 214.486 26.4587 210.22 26.4587C205.29 26.4587 200.526 29.6309 196.605 34.7754C192.684 39.9198 188.074 41.6069 184.605 40.7752C187.1 34.6684 188.027 30.1062 188.027 26.7201C188.027 21.4094 185.401 18.2015 181.16 18.2015C174.708 18.2015 170.99 24.3558 170.99 30.8309C170.99 35.8328 173.259 40.9772 178.249 43.4722C174.067 52.9294 167.96 61.4836 165.643 61.4836C162.649 61.4836 161.77 46.8345 161.937 36.3555C162.043 30.3438 162.542 30.0349 162.542 28.2171C162.542 27.1716 161.865 26.4587 159.145 26.4587C152.8 26.4587 150.84 31.8289 150.543 37.9951C150.448 40.3356 150.079 42.6643 149.45 44.9216C146.8 54.3788 141.335 61.5549 137.771 61.5549C136.119 61.5549 135.668 59.9034 135.668 57.7411C135.668 50.9334 139.482 42.4267 139.482 35.1674C139.482 29.8329 137.141 26.4587 132.733 26.4587C127.541 26.4587 120.674 32.6368 114.175 44.2088C116.314 35.3456 117.193 26.7676 110.861 26.7676C109.482 26.7914 108.14 27.1359 106.928 27.7894C106.096 28.1815 105.585 29.0369 105.645 29.9517C106.251 39.3851 98.0411 63.5509 90.2591 63.5509C88.8453 63.5509 88.1562 62.0182 88.1562 59.547C88.1562 52.7274 92.2195 38.3277 94.263 31.7339C94.5244 30.8784 94.6669 30.1418 94.6669 29.5002C94.6669 27.6943 93.5501 26.7676 91.0195 26.7676C88.2393 26.7676 85.2216 27.825 82.3108 32.9457C81.289 28.431 78.2356 26.4587 73.9704 26.4587C66.9726 26.4587 59.1549 33.8605 55.7214 43.5078C51.1235 56.3867 41.8564 68.826 29.3814 68.826C18.059 68.826 12.0829 59.4044 12.0829 44.5177C12.0829 23.0252 27.8607 5.46521 39.5634 5.46521C45.1593 5.46521 47.8325 9.02948 47.8325 14.4947C47.8325 21.1123 44.1375 24.1895 44.1375 26.7082C44.1375 27.4805 44.7791 28.2409 46.0503 28.2409C51.1353 28.2409 57.1233 22.2648 57.1233 14.1145C57.1233 5.96421 50.5057 0 38.803 0C19.4609 0 0 19.4609 0 44.3989C0 64.24 9.78985 76.204 26.7201 76.204C38.2683 76.204 48.3552 67.2221 53.7967 56.7431C54.4145 65.4281 58.3589 69.9666 64.3707 69.9666C69.717 69.9666 74.0417 66.7825 77.3446 61.1866C78.6158 67.0438 81.99 69.9072 86.3741 69.9072C91.3997 69.9072 95.6055 66.7231 99.6094 60.8064C99.55 65.4518 100.607 69.824 104.635 69.824C106.536 69.824 108.805 69.3844 109.209 67.7211C113.451 50.1849 123.93 35.8684 127.137 35.8684C128.088 35.8684 128.349 36.7832 128.349 37.8644C128.349 42.6286 124.987 52.3947 124.987 58.6322C124.987 65.3686 127.85 69.824 133.767 69.824C140.325 69.824 146.90 61.7925 151.434 50.0542C152.824 61.0202 155.83 69.8715 160.535 69.8715C166.309 69.8715 176.562 57.7174 182.776 44.8504C185.211 45.1593 188.87 45.0761 192.387 42.593C190.89 46.383 190.011 50.5294 190.011 54.6758C190.011 66.6161 195.714 69.9666 200.621 69.9666C205.955 69.9666 210.28 66.7825 213.595 61.1866C214.688 66.236 217.48 69.8953 222.612 69.8953C230.644 69.8953 237.618 61.6856 237.618 54.9491C237.618 53.167 236.857 52.0858 235.966 52.0858ZM69.2656 63.3489C66.0221 63.3489 64.7508 60.0816 64.7508 55.2105C64.7508 46.7513 70.5368 32.6249 76.6555 32.6249C79.3287 32.6249 80.3386 35.7734 80.3386 39.6228C80.3386 48.2126 74.8377 63.3489 69.2656 63.3489ZM180.364 38.102C178.427 35.7971 177.726 32.6606 177.726 29.8686C177.726 26.4231 178.986 23.5123 180.494 23.5123C182.003 23.5123 182.467 24.9974 182.467 27.0647C182.467 30.522 181.231 35.5714 180.364 38.102ZM205.516 63.3489C202.272 63.3489 201.001 59.5945 201.001 55.2105C201.001 47.0483 206.787 32.6249 212.953 32.6249C215.626 32.6249 216.577 35.7496 216.577 39.6228C216.577 48.2126 211.171 63.3489 205.516 63.3489Z" fill="white"/>
+           </svg>
+        </div>
+        
+        <!-- CTA Button - Underneath logo as unit -->
+        <div style="
+            position: absolute;
+            top: 50%;
+            left: 20px;
+            transform: translateY(17.5px);
+            z-index: 3;
+            background: white;
+            color: #4A53FA;
+            padding: 10px 14px;
+            border-radius: 10px;
+            font-family: 'CanvaSans-Medium', Arial, sans-serif;
+            font-weight: 500;
+            font-size: 14px;
+            letter-spacing: -0.03em;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        " onmouseover="this.style.transform='translateY(17.5px) scale(1.07)'; this.style.background='#f8f8f8'"
+           onmouseout="this.style.transform='translateY(17.5px) scale(1)'; this.style.background='white'"
+           onclick="alert('Click tracked! This would open your landing page.')">
+            <svg style="width: 14px; height: 14px; flex-shrink: 0;" viewBox="0 0 29 28" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <path fill-rule="evenodd" clip-rule="evenodd" d="M17.1789 3.36364C17.1789 4.47778 16.5957 5.44332 15.7441 5.9167C17.0403 9.46606 18.395 11.2121 19.5874 11.3497C20.9381 11.5055 22.1731 10.8643 23.3824 9.28436C23.4145 9.24244 23.4479 9.20347 23.4823 9.16735C23.2192 8.72117 23.0666 8.19011 23.0666 7.62017C23.0666 6.03863 24.2419 4.75653 25.6916 4.75653C27.1414 4.75653 28.3166 6.03863 28.3166 7.62017C28.3166 9.20171 27.1414 10.4838 25.6916 10.4838C25.6275 10.4838 25.5639 10.4813 25.5009 10.4764L23.5434 18.6068C23.1355 20.3007 21.6697 21.489 19.9881 21.489H9.14445C7.46285 21.489 5.99704 20.3007 5.58919 18.6068L3.64031 10.5124C3.56638 10.5192 3.49157 10.5227 3.41602 10.5227C1.96627 10.5227 0.791016 9.24063 0.791016 7.65908C0.791016 6.07754 1.96627 4.79545 3.41602 4.79545C4.86576 4.79545 6.04102 6.07754 6.04102 7.65908C6.04102 8.21172 5.89752 8.7278 5.64895 9.16538C5.68963 9.20805 5.72874 9.25472 5.76597 9.30553C6.91709 10.8765 8.14066 11.5117 9.54514 11.3497C10.7935 11.2057 12.1409 9.46938 13.3855 5.92865C12.5221 5.45969 11.9289 4.48723 11.9289 3.36364C11.9289 1.78209 13.1042 0.5 14.5539 0.5C16.0037 0.5 17.1789 1.78209 17.1789 3.36364ZM7.07737 24.5136H22.0305C22.7424 24.5136 23.3196 25.1849 23.3196 26.0129C23.3196 26.841 22.7424 27.5123 22.0305 27.5123H7.07737C6.36544 27.5123 5.78831 26.841 5.78831 26.0129C5.78831 25.1849 6.36544 24.5136 7.07737 24.5136Z" fill="#FDBD68"/>
+            </svg>
+            <span style="line-height: 1;">Try for free</span>
+        </div>
+       
+        <!-- Headline - positioned for leaderboard layout -->
+        <h2 class="ad-headline">Create standout<br>content faster</h2>
+        
+        <!-- Custom Cursor Tracker -->
+        <div id="custom-cursor" style="
+            position: absolute;
+            width: 60px;
+            height: 60px;
+            pointer-events: none;
+            z-index: 10;
+            opacity: 0;
+            transition: opacity 0.2s ease;
+        ">
+            <img src="../Asset/Collab Cursor.svg" alt="Cursor" style="width: 100%; height: 100%;">
+        </div>
+
+        <!-- Image Hosting Box - bleeding off edges -->
+        <div id="image-hosting-box" style="
+            background: white;
+            width: 300px;
+            height: 270px;
+            border-radius: 0;
+            overflow: hidden;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: absolute;
+            top: -10px;
+            right: -10px;
+            z-index: 2;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        ">
+            <img id="hosted-image" src="../Asset/1.png" alt="Content Preview" style="
+                width: 100%;
+                height: 100%;
+                object-fit: cover;
+                transition: transform 0.3s ease;
+            " onerror="this.style.background='#f0f0f0'; this.alt='Image Preview';">
+            
+            <!-- SVG Gradient Swipe Overlay -->
+            <svg id="gradient-swipe-svg" style="
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                z-index: 3;
+                pointer-events: none;
+                transform: translateX(-100%);
+                opacity: 0;
+            " viewBox="0 0 109 247" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <rect x="0.328491" y="0.321411" width="108.547" height="245.738" fill="url(#paint0_linear_7_8492)"/>
+                <defs>
+                    <linearGradient id="paint0_linear_7_8492" x1="31.4007" y1="123.19" x2="108.875" y2="123.19" gradientUnits="userSpaceOnUse">
+                        <stop offset="0.127263" stop-color="#00C4CC" stop-opacity="0"/>
+                        <stop offset="0.636314" stop-color="#5A32FA" stop-opacity="0.5"/>
+                        <stop offset="1" stop-color="#7D2AE8"/>
+                    </linearGradient>
+                </defs>
+            </svg>
+            
+         
+        </div>
+        
+                    <!-- Background remover Button - positioned on top of image area with 30% on gradient, 70% on image -->
+        <div id="bg-remover-button" style="
+            position: absolute;
+            top: 50%;
+            right: 222px;
+            transform: translateY(-50%);
+            z-index: 4;
+            background: white;
+            color: #333;
+            padding: 6px 10px;
+            border-radius: 8px;
+            font-family: 'CanvaSans-Medium', Arial, sans-serif;
+            font-weight: 500;
+            font-size: 11px;
+            letter-spacing: -0.03em;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 4px;
+            opacity: 1;
+            pointer-events: all;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.15);
+        " onmouseover="this.style.transform='translateY(-50%) scale(1.07)'; this.style.background='#f8f8f8'"
+           onmouseout="this.style.transform='translateY(-50%) scale(1)'; this.style.background='white'"
+           onclick="handleBackgroundRemover(event)">
+                            <span style="line-height: 1;">Background remover</span>
+        </div>
+    </div>
+    
+    <script>
+        // Function to adjust headline size and position based on text length - adapted for leaderboard
+        function adjustHeadlineLayout() {
+            const headline = document.querySelector('.ad-container h2');
+            if (!headline) return;
+            
+            const text = headline.textContent;
+            const textLength = text.length;
+            
+            // Calculate available space for leaderboard format with new layout
+            const logoAndCtaWidth = 185; // Logo (130px) + 20px margin + spacing
+            const availableWidth = 970 - logoAndCtaWidth - 300; // Total - logo area - image box (300px)
+            
+            // Since logo and CTA are vertically centered, headline should be too
+            const headlineCenter = 125; // Center of 250px height
+            
+            // Use fixed larger font size (150% of original 28px = 42px)
+            let fontSize = 42;
+            
+            // Apply styles for leaderboard layout
+            headline.style.fontSize = fontSize + 'px';
+            headline.style.top = headlineCenter + 'px';
+            headline.style.left = '185px';
+            headline.style.transform = 'translateY(-50%)';
+            headline.style.textAlign = 'left';
+            headline.style.maxWidth = availableWidth + 'px';
+            headline.style.whiteSpace = 'normal';
+            headline.style.lineHeight = '1.1';
+        }
+        
+        // Function to create starburst sparkles (same as original)
+        function createSparkles() {
+            const imageBox = document.getElementById('image-hosting-box');
+            const sparkleContainer = document.createElement('div');
+            sparkleContainer.id = 'sparkle-container';
+            sparkleContainer.style.cssText = `
+                position: absolute;
+                top: 0;
+                left: 0;
+                width: 100%;
+                height: 100%;
+                pointer-events: none;
+                z-index: 5;
+            `;
+            
+            const sparkleCount = 6;
+            const centerX = 50;
+            const centerY = 50;
+            
+            for (let i = 0; i < sparkleCount; i++) {
+                const sparkle = document.createElement('div');
+                sparkle.className = 'sparkle';
+                
+                const angle = (i / sparkleCount) * 360 + Math.random() * 30 - 15;
+                const sizeVariation = 0.4 + Math.random() * 1.2;
+                const startX = centerX;
+                const startY = centerY;
+                
+                const directionX = Math.cos(angle * Math.PI / 180);
+                const directionY = Math.sin(angle * Math.PI / 180);
+                
+                let endX, endY;
+                const absX = Math.abs(directionX);
+                const absY = Math.abs(directionY);
+                
+                if (absX / 40 > absY / 25) {
+                    endX = directionX > 0 ? 95 : 5;
+                    endY = centerY + (directionY / absX) * 40;
+                } else {
+                    endY = directionY > 0 ? 90 : 10;
+                    endX = centerX + (directionX / absY) * 25;
+                }
+                
+                endX = Math.max(5, Math.min(95, endX));
+                endY = Math.max(10, Math.min(90, endY));
+                
+                const animationDuration = 1.4 + Math.random() * 0.4;
+                const animationDelay = 0.3 + Math.random() * 0.3;
+                
+                sparkle.style.cssText = `
+                    left: ${startX}%;
+                    top: ${startY}%;
+                    width: 20px;
+                    height: 20px;
+                    opacity: 0;
+                    transform: translate(-50%, -50%) scale(0);
+                    visibility: hidden;
+                    pointer-events: none;
+                `;
+                
+                const rotationAngle = Math.random() * 360;
+                const keyframes = `
+                    @keyframes starBurst${i} {
+                        0% {
+                            opacity: 0;
+                            visibility: hidden;
+                            background: transparent;
+                            clip-path: none;
+                            filter: none;
+                            border-radius: 0;
+                            left: ${startX}%;
+                            top: ${startY}%;
+                            transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                        }
+                        5% {
+                            opacity: 0;
+                            visibility: visible;
+                            background: #8B3DFF;
+                            clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+                            filter: drop-shadow(0 0 6px #8B3DFF) drop-shadow(0 0 12px rgba(139, 61, 255, 0.6));
+                            border-radius: 4px;
+                            left: ${startX}%;
+                            top: ${startY}%;
+                            transform: translate(-50%, -50%) scale(0) rotate(0deg);
+                        }
+                        10% {
+                            opacity: 1;
+                            visibility: visible;
+                            background: #8B3DFF;
+                            clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+                            filter: drop-shadow(0 0 6px #8B3DFF) drop-shadow(0 0 12px rgba(139, 61, 255, 0.6));
+                            border-radius: 4px;
+                        }
+                        80% {
+                            opacity: 1;
+                            visibility: visible;
+                            background: #8B3DFF;
+                            clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+                            filter: drop-shadow(0 0 6px #8B3DFF) drop-shadow(0 0 12px rgba(139, 61, 255, 0.6));
+                            border-radius: 4px;
+                            left: ${endX}%;
+                            top: ${endY}%;
+                            transform: translate(-50%, -50%) scale(${sizeVariation}) rotate(${rotationAngle}deg);
+                        }
+                        100% {
+                            opacity: 0;
+                            visibility: hidden;
+                            background: #8B3DFF;
+                            clip-path: polygon(50% 0%, 62% 38%, 100% 50%, 62% 62%, 50% 100%, 38% 62%, 0% 50%, 38% 38%);
+                            filter: drop-shadow(0 0 6px #8B3DFF) drop-shadow(0 0 12px rgba(139, 61, 255, 0.6));
+                            border-radius: 4px;
+                            left: ${endX}%;
+                            top: ${endY}%;
+                            transform: translate(-50%, -50%) scale(${sizeVariation}) rotate(${rotationAngle}deg);
+                        }
+                    }
+                `;
+                
+                const styleSheet = document.createElement('style');
+                styleSheet.textContent = keyframes;
+                document.head.appendChild(styleSheet);
+                
+                sparkleContainer.appendChild(sparkle);
+                
+                sparkle.style.animation = `starBurst${i} ${animationDuration}s cubic-bezier(.07, .34, .32, .92) forwards`;
+                sparkle.style.animationDelay = `${animationDelay}s`;
+                sparkle.style.animationFillMode = 'both';
+            }
+            
+            imageBox.appendChild(sparkleContainer);
+            
+            setTimeout(() => {
+                if (sparkleContainer.parentNode) {
+                    sparkleContainer.parentNode.removeChild(sparkleContainer);
+                }
+            }, 3000);
+        }
+        
+        // Track if animation has been triggered
+        let animationTriggered = false;
+        
+        function handleBackgroundRemover(event) {
+            event.stopPropagation();
+            
+            if (animationTriggered) return;
+            animationTriggered = true;
+            
+            const hostedImage = document.getElementById('hosted-image');
+            const gradientSwipeSvg = document.getElementById('gradient-swipe-svg');
+            
+            if (!hostedImage || !gradientSwipeSvg) return;
+            
+            // Start the swipe animation sequence
+            gradientSwipeSvg.style.opacity = '1';
+            gradientSwipeSvg.style.animation = 'svgSwipeAcross 2.4s cubic-bezier(.67, 0, .25, 1)';
+            
+            // Create sparkles as swipe exits screen
+            setTimeout(() => {
+                createSparkles();
+            }, 1800);
+            
+            // Change headline with clean animation
+            const headline = document.querySelector('.ad-container h2');
+            if (headline) {
+                headline.style.animation = 'headlineExitUp 0.5s cubic-bezier(.74, 0, .89, .11) forwards';
+                
+                setTimeout(() => {
+                    headline.innerHTML = 'with 100M+<br>premium templates';
+                    adjustHeadlineLayout();
+                    headline.style.animation = 'headlineEnterUp 0.6s cubic-bezier(.14, .96, .34, 1) forwards';
+                }, 500);
+            }
+            
+            // Change to 2.png during the swipe
+            setTimeout(() => {
+                hostedImage.setAttribute('src', '../Asset/2.png');
+            }, 1200);
+            
+            // Phase 2: After swipe completes, hide button and switch to 3.png
+            setTimeout(() => {
+                gradientSwipeSvg.style.opacity = '0';
+                gradientSwipeSvg.style.animation = '';
+                gradientSwipeSvg.style.transform = 'translateX(-100%)';
+                
+                // Hide the Background remover button permanently
+                const bgRemoverButton = document.getElementById('bg-remover-button');
+                if (bgRemoverButton) {
+                    bgRemoverButton.style.opacity = '0';
+                    bgRemoverButton.style.pointerEvents = 'none';
+                }
+                
+                setTimeout(() => {
+                    // Apply scale animation during image transition
+                    hostedImage.style.animation = 'scaleTransition 0.3s ease forwards';
+                    
+                    // Change to 3.png at the midpoint of the scale animation
+                    setTimeout(() => {
+                        hostedImage.setAttribute('src', '../Asset/3.png');
+                    }, 150); // Halfway through the 300ms scale animation
+                    
+                    // Reset animation after it completes
+                    setTimeout(() => {
+                        hostedImage.style.animation = '';
+                    }, 300);
+                }, 1000);
+            }, 2400);
+        }
+        
+        // Mouse tracking for custom cursor
+        function initCursorTracking() {
+            const adContainer = document.getElementById('ad-container');
+            const customCursor = document.getElementById('custom-cursor');
+            
+            adContainer.addEventListener('mouseenter', function() {
+                customCursor.style.opacity = '1';
+            });
+            
+            adContainer.addEventListener('mouseleave', function() {
+                customCursor.style.opacity = '0';
+            });
+            
+            adContainer.addEventListener('mousemove', function(e) {
+                const rect = adContainer.getBoundingClientRect();
+                const x = e.clientX - rect.left; // Align horizontally with cursor
+                const y = e.clientY - rect.top; // Align top of SVG with cursor
+                
+                // Remove any transition for immediate response
+                customCursor.style.transition = 'none';
+                customCursor.style.left = x + 'px';
+                customCursor.style.top = y + 'px';
+            });
+        }
+        
+        // Zoom effect and parallax movement for 3.png
+        function initImageHoverEffect() {
+            const imageBox = document.getElementById('image-hosting-box');
+            const hostedImage = document.getElementById('hosted-image');
+            
+            imageBox.addEventListener('mouseenter', function() {
+                // Only apply zoom if showing 3.png
+                if (hostedImage.src.includes('3.png')) {
+                    hostedImage.style.transform = 'scale(1.05)';
+                }
+            });
+            
+            imageBox.addEventListener('mouseleave', function() {
+                // Reset transform only if showing 3.png
+                if (hostedImage.src.includes('3.png')) {
+                    hostedImage.style.transform = 'scale(1)';
+                }
+            });
+            
+            imageBox.addEventListener('mousemove', function(e) {
+                // Only apply parallax if showing 3.png
+                if (hostedImage.src.includes('3.png')) {
+                    const rect = imageBox.getBoundingClientRect();
+                    const centerX = rect.width / 2;
+                    const centerY = rect.height / 2;
+                    
+                    const mouseX = e.clientX - rect.left;
+                    const mouseY = e.clientY - rect.top;
+                    
+                    // Calculate movement relative to center (subtle parallax)
+                    const moveX = (mouseX - centerX) / 20; // Very subtle horizontal movement
+                    const moveY = (mouseY - centerY) / 20; // Very subtle vertical movement
+                    
+                    // Apply zoom + subtle parallax movement
+                    hostedImage.style.transform = `scale(1.05) translate(${moveX}px, ${moveY}px)`;
+                }
+            });
+        }
+
+        // Initialize the ad
+        document.addEventListener('DOMContentLoaded', function() {
+            adjustHeadlineLayout();
+            
+            // Initialize interactive features
+            initCursorTracking();
+            initImageHoverEffect();
+            
+            // Add click handler for main ad
+            const adContainer = document.getElementById('ad-container');
+            if (adContainer) {
+                adContainer.addEventListener('click', function(event) {
+                    if (event.target.closest('#bg-remover-button')) return;
+                    alert('Ad clicked! This would open your landing page.');
+                });
+                
+                // Add hover effect to the ad container
+                adContainer.addEventListener('mouseenter', function() {
+                    this.style.transform = 'scale(1.02)';
+                    this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.2)';
+                });
+                
+                adContainer.addEventListener('mouseleave', function() {
+                    this.style.transform = 'scale(1)';
+                    this.style.boxShadow = '0 4px 15px rgba(0, 0, 0, 0.1)';
+                });
+            }
+        });
+    </script>
+</body>
+</html> 
